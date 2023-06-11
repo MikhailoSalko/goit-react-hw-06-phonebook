@@ -2,17 +2,11 @@ import PropTypes from 'prop-types';
 import styles from './ContactList.module.css';
 import ContactItem from './ContactItem/ContactItem';
 
-const ContactList = ({ contacts, onClick }) => {
-  console.log(contacts);
+const ContactList = ({ contacts }) => {
   return (
     <ul className={styles.list}>
       {contacts.map(({ id, name, number }) => (
-        <ContactItem
-          key={id}
-          name={name}
-          number={number}
-          onClick={() => onClick(id)}
-        />
+        <ContactItem key={id} name={name} number={number} id={id} />
       ))}
     </ul>
   );
@@ -21,7 +15,6 @@ const ContactList = ({ contacts, onClick }) => {
 export default ContactList;
 
 ContactList.propTypes = {
-  onClick: PropTypes.func.isRequired,
   contacts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
