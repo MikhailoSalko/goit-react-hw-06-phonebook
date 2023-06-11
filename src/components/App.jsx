@@ -4,52 +4,61 @@ import { Notify } from 'notiflix';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContact, deleteContact } from 'redux/contacts-slice';
 
 function App() {
-  const [contacts, setContact] = useState(
-    () => JSON.parse(localStorage.getItem('contacts')) ?? []
-  );
+  const contacts = useSelector(state => state.contacts);
+  const dispatch = useDispatch();
+  console.log(contacts);
+
+  // const [contacts, setContact] = useState(
+  //   () => JSON.parse(localStorage.getItem('contacts')) ?? []
+  // );
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const addNewContact = ({ name, number }) => {
-    if (checkContactExist(name)) {
-      Notify.failure(`${name} is already in your contacts`);
-      return;
-    }
-    setContact(prevContacts => {
-      const newContact = {
-        id: nanoid(),
-        name,
-        number,
-      };
-      return [...prevContacts, newContact];
-    });
-  };
+  // const addNewContact = ({ name, number }) => {
+  //   if (checkContactExist(name)) {
+  //     Notify.failure(`${name} is already in your contacts`);
+  //     return;
+  //   }
+  //   setContact(prevContacts => {
+  //     const newContact = {
+  //       id: nanoid(),
+  //       name,
+  //       number,
+  //     };
+  //     return [...prevContacts, newContact];
+  //   });
+  // };
 
   const deleteContact = id => {
-    setContact(prevContacts => {
-      return prevContacts.filter(contact => contact.id !== id);
-    });
+    return dispatch(deleteContact(id));
+    // setContact(prevContacts => {
+    //   return prevContacts.filter(contact => contact.id !== id);
+    // });
   };
 
-  const checkContactExist = name => {
-    const normalizadName = name.toLowerCase().trim();
-    const foundContact = contacts.find(
-      ({ name }) => name.toLowerCase().trim() === normalizadName
-    );
-    return Boolean(foundContact);
-  };
+  // const checkContactExist = name => {
+  //   const normalizadName = name.toLowerCase().trim();
+  //   const foundContact = contacts.find(
+  //     ({ name }) => name.toLowerCase().trim() === normalizadName
+  //   );
+  //   return Boolean(foundContact);
+  // };
 
   const filterInput = ({ target }) => setFilter(target.value);
 
   const filterContactList = () => {
-    return contacts.filter(({ name }) => {
-      return name.toLowerCase().trim().includes(filter.toLowerCase().trim());
-    });
+    // return contacts.filter(({ name }) => {
+    //   return name.toLowerCase().trim().includes(filter.toLowerCase().trim());
+    // });
+
+    return contacts;
   };
 
   const filteredContacts = filterContactList();
@@ -69,13 +78,13 @@ function App() {
       <div>
         <div style={{ marginBottom: '30px', width: '350px' }}>
           <h2 style={{ marginBottom: '10px', fontSize: '40px' }}>PhoneBook</h2>
-          <ContactForm onSubmit={addNewContact} />
+          <ContactForm />
         </div>
         <div>
           <h3 style={{ marginBottom: '10px', fontSize: '30px' }}>Contacts</h3>
           <Filter filter={filter} filterInput={filterInput} />
           {isContacts ? (
-            <ContactList contacts={filteredContacts} onClick={deleteContact} />
+            <ContactList contacts={contacts} onClick={deleteContact} />
           ) : (
             <p style={{ fontSize: 18, color: '#010101' }}>
               There are no contacts in your phonebook

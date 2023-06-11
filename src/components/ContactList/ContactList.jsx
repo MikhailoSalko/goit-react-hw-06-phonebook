@@ -3,6 +3,7 @@ import styles from './ContactList.module.css';
 import ContactItem from './ContactItem/ContactItem';
 
 const ContactList = ({ contacts, onClick }) => {
+  console.log(contacts);
   return (
     <ul className={styles.list}>
       {contacts.map(({ id, name, number }) => (
