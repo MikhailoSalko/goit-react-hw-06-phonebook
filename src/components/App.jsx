@@ -1,33 +1,11 @@
-// import { useState, useEffect } from 'react';
-// import { nanoid } from '@reduxjs/toolkit';
-import { Notify } from 'notiflix';
 import ContactForm from './ContactForm/ContactForm';
-// import Filter from './Filter/Filter';
+import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
-import { useSelector, useDispatch } from 'react-redux';
-import { addContact, deleteContact } from 'redux/contacts-slice';
-import { getContacts, getFilter } from '../redux/selectors';
+import { useSelector } from 'react-redux';
+import { getFilteredContacts } from '../redux/selectors';
 
 function App() {
-  const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
-
-  // const [filter, setFilter] = useState('');
-
-  // const filterInput = ({ target }) => setFilter(target.value);
-
-  // const filterContactList = () => {
-  //   // return contacts.filter(({ name }) => {
-  //   //   return name.toLowerCase().trim().includes(filter.toLowerCase().trim());
-  //   // });
-
-  //   return contacts;
-  // };
-
-  // const filteredContacts = filterContactList();
-  // const isContacts = Boolean(filteredContacts.length);
-  const isContacts = true;
+  const filteredContacts = useSelector(getFilteredContacts);
 
   return (
     <div
@@ -47,9 +25,9 @@ function App() {
         </div>
         <div>
           <h3 style={{ marginBottom: '10px', fontSize: '30px' }}>Contacts</h3>
-          {/* <Filter filter={filter} filterInput={filterInput} /> */}
-          {isContacts ? (
-            <ContactList contacts={contacts} />
+          <Filter />
+          {filteredContacts.length ? (
+            <ContactList contacts={filteredContacts} />
           ) : (
             <p style={{ fontSize: 18, color: '#010101' }}>
               There are no contacts in your phonebook

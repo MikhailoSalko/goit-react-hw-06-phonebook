@@ -18,18 +18,18 @@ function ContactForm() {
   const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
 
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setState(prevState => {
+      return { ...prevState, [name]: value };
+    });
+  };
+
   const handleSubmitForm = e => {
     e.preventDefault();
     addNewContact({ name, number });
     setState({
       ...initialState,
-    });
-  };
-
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    setState(prevState => {
-      return { ...prevState, [name]: value };
     });
   };
 
